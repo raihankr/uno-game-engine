@@ -1,20 +1,29 @@
 class Game {
   #players = [];
   #points = new Map();
+  #roundConfig;
+  #type = '';
+  #rules = new Map();
 
-  constructor(players) {
+  constructor(players, type, rules) {
     this.#players = players;
+    this.#type = type;
+    this.#rules = rules;
+  }
+
+  get players() {
+    return this.#players;
+  }
+
+  get roundConfig() {
+    return this.#roundConfig;
+  }
+
+  get type() {
+    return this.#type;
   }
 
   newGame() {
-
-  }
-
-  put(players, card) {
-
-  }
-
-  draw(players, amount) {
 
   }
 
@@ -26,7 +35,11 @@ class Game {
     return this.#points[player];
   }
 
-  get players() {
-    return this.#players;
+  newRound() {
+
+  }
+
+  getRules(rule) {
+
   }
 }
