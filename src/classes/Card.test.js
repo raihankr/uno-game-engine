@@ -1,6 +1,4 @@
-import titleize from "titleize";
 import Card from "./Card";
-import { cardTypes } from "../namespaces/cardTypes";
 
 describe('checks invalid color cards', () => {
   test.each([
