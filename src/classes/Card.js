@@ -28,11 +28,21 @@ export default class Card {
      * @type {string}
      */
     this.color = color;
+
     /**
      * The number (in `string`) or symbol of the card.
      * @type {string}
      */
     this.symbol = symbol;
+
+    if (symbol.length == 1 && parseInt(symbol) != NaN)
+      /**
+       * The number of the card. An alias for {@link symbol}
+       *    properties if the card is a number card.
+       * @type {number}
+       */
+      this.number = parseInt(symbol)
+
     /**
      * The name of the card.
      * @type {string}
