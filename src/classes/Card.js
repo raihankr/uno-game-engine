@@ -41,7 +41,7 @@ export default class Card {
        *    properties if the card is a number card.
        * @type {number}
        */
-      this.number = parseInt(symbol)
+      this.number = parseInt(symbol);
 
     /**
      * The name of the card.
