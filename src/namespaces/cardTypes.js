@@ -20,3 +20,8 @@ export const cardTypes = {
   '+2': 'Draw Two',
   '+4': 'Wild Draw Four'
 }
+
+export const actionCards = [
+  'r', 's', 'w',
+  '+2', '+4'
+];
