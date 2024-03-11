@@ -3,13 +3,20 @@ import shuffle from "./shuffle";
 let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 let array1, array2;
 
+console.log('Original array: ' + array);
+
 test('array is shuffled', () => {
-  array1 = shuffle(array);
-  expect(array1).not.toEqual(array);
+  array1 = [...array]
+  shuffle(array);
+  console.log('Shuffled 1 time: ' + array);
+  expect(array).not.toEqual(array1);
 });
 
+
 test('array is shuffled again', () => {
-  array2 = shuffle(array);
-  expect(array2).not.toEqual(array);
-  expect(array2).not.toEqual(array1);
+  array2 = [...array];
+  shuffle(array)
+  console.log('Shuffled 2 times: ' + array);
+  expect(array).not.toEqual(array1);
+  expect(array).not.toEqual(array2);
 });

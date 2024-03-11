@@ -5,14 +5,19 @@
  * @returns {any[]}
  */
 export default function shuffle(array) {
-  let shuffledArray = [];
+  let currentIndex = array.length,  randomIndex;
 
-  for (let [index, values] of array.entries()) {
-    let randomIndex = Math.round(Math.random() * (array.length - 1 - index)) + index;
+  // While there remain elements to shuffle.
+  while (currentIndex > 0) {
 
-    shuffledArray.push(array[randomIndex]);
-    array[randomIndex] = values;
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
   }
 
-  return shuffledArray;
+  return array;
 }
