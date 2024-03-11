@@ -1,6 +1,6 @@
 /**
  * Shuffle the given array using Fisher-Yates algoritm.\
- * Returns the shuffled array
+ * Returns the shuffled array.
  * @param {any[]} array - The array to be shuffled
  * @returns {any[]}
  */

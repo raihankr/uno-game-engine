@@ -7,21 +7,25 @@ import { cardTypes } from "../namespaces/cardTypes";
 export default class Card {
   /**
    * Creates a new UNO Card.
-   * @param {string} color - The color of the card. Either `red`, `yellow`, `green`, `blue`, or `wild`.
+   * @param {string} color - The color of the card.
+   *    Either `red`, `yellow`, `green`, `blue`, or `wild`.
    * @param {string} symbol - The number (in `string`) or symbol of the card.
-   * Check {@link cardTypes} for lists of valid symbols and its name.
+   *    Check {@link cardTypes} for lists of valid symbols and its name.
    */
   constructor(color, symbol) {
     color = color.toLowerCase();
     symbol = symbol.toLowerCase();
 
+    // Automatically change the `color` to `wild` if its a wild card.
     if (['w', '+4'].includes(symbol))
       color = 'wild';
     else if (color == 'wild')
       throw new Error(`${cardTypes[symbol]} Card cannot have \`wild\` color`);
 
     if (!'red,yellow,green,blue,wild'.split(',').includes(color))
-      throw new RangeError('Invalid color value. Must be either `red`, `yellow`. `green`, `blue`, or `wild`');
+      throw new RangeError(
+        'Invalid color value. ' +
+        'Must be either `red`, `yellow`. `green`, `blue`, or `wild`');
 
     /**
      * The color of the card.
@@ -47,7 +51,8 @@ export default class Card {
      * The name of the card.
      * @type {string}
      */
-    this.name = titleize(`${color === 'wild' ? '' : color} ${cardTypes[symbol]} Card`).trim();
+    this.name = titleize(
+      `${color === 'wild' ? '' : color} ${cardTypes[symbol]} Card`).trim();
   }
 
   /**
