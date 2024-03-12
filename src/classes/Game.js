@@ -16,6 +16,9 @@ import Card from "./Card";
 */
 
 // TODO: Add custom rules configuration to the game.
+// TODO: Add objectives options; Whether playing for points or race (winners
+//    ranking decided by the order of players going out the game).
+// TODO: Handle end game.
 
 /**
  * The UNO Game class.
@@ -128,28 +131,41 @@ export default class Game {
       for (let _ of Array(7).fill())
         playersCards[playerId].push(drawPile.pop());
 
-    // TODO: Initialize the discard pile
-    // [x] 1. Draw the first card to the discard pile
-    // [ ] 2. Check if the first card valid and (not a wild draw four card)
-    // [ ] 2.a If the first card is not valid, undraw and
-    //    reshuffle the draw pile.
-    // [ ] 2.b If the first card is an action card, do it action
+    let isTurnClockwise = true;
+    let turn = startingPLayer;
 
-    discardPile.push(drawPile.pop());
-    if (actionCards.includes(discardPile[0].symbol)) {
-      switch (discardPile[0].symbol) {
-
-      }
-    }
-
-    return this.roundConfig = {
+    this.roundConfig = {
       isFinished: false,
-      isTurnClockwise: true,
-      turn: startingPLayer,
+      isTurnClockwise,
+      turn,
       drawPile,
       discardPile,
       playersCards
     };
+
+    // Take the first discard card from the drawing pile.
+    function firstDiscard() {
+      discardPile.push(drawPile.pop());
+      if (actionCards.includes(discardPile[0].symbol))
+        switch (discardPile[0].symbol) {
+          case 'r':
+            this.roundConfig.isTurnClockwise = false;
+          case 's':
+            this.endTurn();
+            break;
+          case '+2':
+            this.draw(this.roundConfig.turn, 2);
+            this.endTurn();
+            break;
+          case '+4':
+            drawPile.push(discardPile.pop());
+            shuffle(discardPile);
+            firstDiscard();
+        }
+    }
+    firstDiscard();
+
+    return this.roundConfig;
   }
 
   /**
@@ -158,7 +174,6 @@ export default class Game {
    * Returns an array of cards that drawed.
    * @param {number|string} playerId - The index or the name of the player.
    * @param {number} [amount] - The amount of the cards to be drawed.
-   * @returns {Card[]}
    */
   draw(playerId, amount) {
     if (!this.roundConfig)
@@ -177,11 +192,28 @@ export default class Game {
     this.getPlayerCards(playerId)
       .push(drawedCards = this.drawPile.splice(-amount, amount));
 
-    // TODO: Handle if the player in turn should play the drawed card or just
+    // Handle if the player in turn should play the drawed card or just
     // skip to next player turn.
-    if (playerId == this.roundConfig.turn) {
-
-    }
+    if (
+      playerId == this.turn &&
+      amount == 1 &&
+      this.isPlayable(drawedCards)
+    ) {
+      /**
+       * Decide whether the player wants to play the drawed card immediately or
+       *    just keep the drawed cards and end the current turn.
+       * @param {boolean} end - `false` if the player wants to play the drawed
+       *    card immediately. Otherwise `true` will keep the drawed cards and
+       *    end the current turn
+       */
+      const shouldEndTurn = (end = false) => {
+        if (end) this.endTurn();
+        else this.play(
+          this.getPlayerCards(playerId).length - 1, null, playerId);
+      }
+      return shouldEndTurn;
+    } else this.endTurn();
+    return null;
   }
 
   /**
@@ -191,20 +223,18 @@ export default class Game {
    * @param {number} cardId - The index of the card in the player's cards that
    *    will be played.
    * @param {string} [color] - The color for the next turn if the player plays
-   *    wild card.
+   *    wild card. You can omit this parameter by providing `null` instead.
    * @param {number} [playerId] - The index of the player, default to the index
    *    of the current player in turn.
    * @returns {Card}
    */
-  play(cardId, color, playerId = this.roundConfig.turn) {
+  play(cardId, color = null, playerId = this.roundConfig.turn) {
     if (!this.roundConfig)
       throw new Error('No available round found in this game');
 
     if (!playerId === this.roundConfig.turn)
       throw new Error('Is not currently `' + this.players[playerId] + '` turn.'
         + ' Cannot jump-in');
-
-    let lastCard = this.discardPile.slice(-1);
 
     if (cardId < 0 || cardId >= this.getPlayerCards().length)
       throw new RangeError('No card found with the specified id: ' + id);
@@ -219,21 +249,28 @@ export default class Game {
       }
     }
 
+    let lastCard = this.discardPile.slice(-1);
+
     // Play the cards if it match the conditions.
     if (
-      lastCard.symbol === willPlay.symbol ||
-      lastCard.color === willPlay.color ||
-      willPlay.color === 'wild'
+      this.isPlayable(willPlay) ||
+      // For if the first discard is a wild card because its color prop
+      // is still  `wild` (not yet changed to the 4 valid colors props)
+      // A wild card will automatically change its color properties after
+      // the player decides what color to play next.
+      lastCard.color == 'wild'
     ) this.discardPile.push(this.getPlayerCards().splice(cardId, 1));
-    else {
+    else
       throw new Error('The specified card is not currently playable');
-    }
 
-    willPlay.color = color;
+    // If the played card is a wild card,
+    // Change its color to the specified color by the player
+    willPlay.color = color ?? willPlay.color;
 
     // Handle playing action cards.
     if (actionCards.includes(willPlay.symbol))
       this.#cardsActions[willPlay.symbol]();
+    else this.endTurn();
 
     return willPlay;
   }
@@ -247,7 +284,10 @@ export default class Game {
    * @returns {Card|Card[]|boolean}
    */
   isPlayable(cards) {
-    let lastCard = this.discardPile.slice(-1);
+    if (!this.roundConfig)
+      throw new Error('No available round found in this game');
+
+    let lastCard = this.roundConfig.discardPile.slice(-1);
 
     if (cards instanceof Array)
       return cards.map(card => {
@@ -268,13 +308,16 @@ export default class Game {
 
     else throw new TypeError(
       'Parameter `cards` cannot accept the received object type. ' +
-      'Accepted types: `Card` or `Array`')
+      'Accepted types: `Card` or `Array<Card>`');
   }
 
   /**
    * End current player's turn.
    */
   endTurn() {
+    if (!this.roundConfig)
+      throw new Error('No available round found in this game');
+
     this.roundConfig.turn +=
       this.roundConfig.isTurnClockwise ? 1 : -1;
 
@@ -332,3 +375,5 @@ export default class Game {
     this.endTurn();
   }
 }
+
+new Game().draw()()
