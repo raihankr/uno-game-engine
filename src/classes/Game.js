@@ -43,9 +43,9 @@ export default class Game {
      */
     this.roundConfig = null;
 
-    if (this.players.length < 2)
+    if (this.players?.length < 2)
       throw new RangeError('Too few players. Minimal 2 players');
-    if (this.players.length > 10)
+    if (this.players?.length > 10)
       throw new RangeError('Too much players. Maximal 10 players');
   }
 
