@@ -375,7 +375,7 @@ export default class Game {
 
       if (this.roundConfig.players.length < 2) {
         this.roundConfig.winners.push(...this.roundConfig.players);
-        this.roundConfig.isFinished = true;
+        return this.roundConfig.isFinished = true;
       }
     }
 
@@ -387,12 +387,6 @@ export default class Game {
       this.roundConfig.turn = this.roundConfig.players.length - 1;
     else if (this.roundConfig.turn >= this.roundConfig.players.length)
       this.roundConfig.turn = 0;
-
-    // Checks whether any player has called 'UNO' for the current turn and
-    // resets the state for the next turn.
-    if (this.roundConfig.unoCalls.includes(true))
-      for (let index in this.roundConfig.unoCalls)
-        this.roundConfig.unoCalls[index] = false;
   }
 
   /**
