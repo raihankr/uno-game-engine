@@ -28,6 +28,9 @@ module.exports = {
     'sourceType': 'module'
   },
   'rules': {
+    'no-unused-vars': [
+      'warn'
+    ],
     '@stylistic/js/indent': [
       'warn',
       2,
