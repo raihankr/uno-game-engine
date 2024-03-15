@@ -40,7 +40,7 @@ export default class Card {
      */
     this.symbol = symbol;
 
-    if (symbol.length == 1 && parseInt(symbol) != NaN)
+    if (symbol.length == 1 && !isNaN(parseInt(symbol)))
       /**
        * The number of the card. An alias for {@link symbol}
        *    properties if the card is a number card.

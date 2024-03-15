@@ -8,7 +8,7 @@ import Card from "./Card";
  * @property {boolean} isFinished - Returns `true` if the round is finished.
  * @property {boolean} isTurnClockwise - Returns `true` if the direction of play
  *    is in clockwise direction.
- * @property {String[]} players - Array of players' name in the current round.
+ * @property {string[]} players - Array of players' name in the current round.
  * @property {number} turn - Returns the index of player in the game in the
  *    current turn.
  * @property {Card[]} drawPile - Array of Cards in the draw pile.
@@ -16,7 +16,7 @@ import Card from "./Card";
  * @property {Array<Card[]>} playersCards - Array of player's cards.
  * @property {number|null} mustCallsUno - The index of the player who must calls
  *    'UNO' because they have only one card remaining on their hands.
- * @property {number[]} winners - Indexes of players whose already wins the game.
+ * @property {string[]} winners - Indexes of players whose already wins the game.
 */
 
 // TODO: Add custom rules configuration to the game.
@@ -29,23 +29,23 @@ import Card from "./Card";
 export default class Game {
   /**
    * Creates a new UNO game.
-   * @param {String[]} players Array of players' name.
+   * @param {string[]} players Array of players' name.
    */
   constructor(players) {
     /**
      * Array of players' name.
-     * @type {String[]}
+     * @type {string[]}
      */
-    this.players = players;
+    this.players = [...new Set(players)];
     /**
      * The configuration of current round in the game.
      * @type {RoundConfig}
      */
     this.roundConfig = null;
 
-    if (this.players?.length < 2)
+    if (this.players?.length< 2)
       throw new RangeError('Too few players. Minimal 2 players');
-    if (this.players?.length > 10)
+    if (this.players?.length> 10)
       throw new RangeError('Too much players. Maximal 10 players');
   }
 
@@ -96,7 +96,7 @@ export default class Game {
 
   /**
    * Initialize a new UNO game round.
-   * @param {number|string} startingPLayer - The index of the first player to
+   * @param {number} startingPLayer - The index of the first player to
    *    play in the round.
    * @returns {RoundConfig}
    */
@@ -119,7 +119,7 @@ export default class Game {
     for (let color of 'red,yellow,green,blue'.split(',')) {
       drawPile.push(new Card(color, '0'));
 
-      for (let symbol of '123456789rs'.split('').push('+2')) {
+      for (let symbol of '12345678rs'.split('').concat('+2')) {
         drawPile.push(new Card(color, symbol))
         drawPile.push(new Card(color, symbol))
       }
@@ -140,6 +140,8 @@ export default class Game {
         playersCards[playerId].push(drawPile.pop());
 
     let mustCallsUno = null;
+    
+    const winners = [];
 
     this.roundConfig = {
       isFinished: false,
@@ -149,7 +151,8 @@ export default class Game {
       drawPile,
       discardPile,
       playersCards,
-      mustCallsUno
+      mustCallsUno,
+      winners
     };
 
     // Take the first discard card from the drawing pile.
@@ -181,7 +184,7 @@ export default class Game {
    * Draw a specified amount of cards from the draw pile to the specified
    *    player.\
    * Returns an array of cards that drawed.
-   * @param {number|string} playerId - The index or the name of the player.
+   * @param {number} playerId - The index or the name of the player.
    * @param {number} [amount] - The amount of the cards to be drawed.
    */
   draw(playerId, amount) {
@@ -244,7 +247,7 @@ export default class Game {
     if (!this.roundConfig || this.roundConfig?.isFinished)
       throw new Error('No available round found in this game');
 
-    if (!playerId === this.roundConfig.turn)
+    if (playerId !== this.roundConfig.turn)
       throw new Error('Is not currently `' + this.roundConfig.players[playerId] + '` turn.'
         + ' Cannot jump-in');
 
@@ -370,8 +373,10 @@ export default class Game {
     if (this.getPlayerCards[currPlayer].length === 1)
       this.roundConfig.mustCallsUno = currPlayer;
     if (this.getPlayerCards[currPlayer].length === 0) {
-      this.roundConfig.winners.push(this.roundConfig.turn);
-      this.roundConfig.players.splice(this.roundConfig.turn, 1)[0];
+      this.roundConfig.winners.push(
+        this.roundConfig.players[
+          this.roundConfig.turn]);
+      this.roundConfig.players.splice(this.roundConfig.turn, 1);
 
       if (this.roundConfig.players.length < 2) {
         this.roundConfig.winners.push(...this.roundConfig.players);
@@ -391,7 +396,6 @@ export default class Game {
 
   /**
    * Lists all actions cards and its corresponding side effects/actions methods.
-   * @private
    */
   #cardsActions = {
     r: this.#reverseEffect,
