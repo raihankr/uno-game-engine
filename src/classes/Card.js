@@ -1,7 +1,6 @@
-import titleize from "titleize";
-import { actionCards, cardTypes } from "../namespaces/cardTypes";
+import titleize from 'titleize';
+import { actionCards, cardTypes } from '../namespaces/cardTypes';
 
-// TODO: Add points prop for each card types.
 /**
  * UNO card class.
  */
@@ -56,6 +55,10 @@ export default class Card {
       `${color === 'wild' ? '' : color} ${cardTypes[symbol]} Card`).trim();
 
     // Define the points for each type of cards.
+    /**
+     * The points of the card.
+     * @type {string}
+     */
     this.points = 0;
     if (actionCards.includes(symbol))
       if (['w', '+4'].includes(symbol))

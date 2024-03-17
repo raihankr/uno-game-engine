@@ -1,6 +1,6 @@
-import { actionCards } from "../namespaces/cardTypes";
-import shuffle from "../utils/shuffle";
-import Card from "./Card";
+import { actionCards } from '../namespaces/cardTypes';
+import shuffle from '../utils/shuffle';
+import Card from './Card';
 
 /**
  * The configuration object for a round in a game.
@@ -16,7 +16,8 @@ import Card from "./Card";
  * @property {Array<Card[]>} playersCards - Array of player's cards.
  * @property {number|null} mustCallsUno - The index of the player who must calls
  *    'UNO' because they have only one card remaining on their hands.
- * @property {string[]} winners - Indexes of players whose already wins the game.
+ * @property {string[]} winners - Indexes of players whose already wins the
+ *    game.
 */
 
 // TODO: Add custom rules configuration to the game.
@@ -43,9 +44,9 @@ export default class Game {
      */
     this.roundConfig = null;
 
-    if (this.players?.length< 2)
+    if (this.players?.length < 2)
       throw new RangeError('Too few players. Minimal 2 players');
-    if (this.players?.length> 10)
+    if (this.players?.length > 10)
       throw new RangeError('Too much players. Maximal 10 players');
   }
 
@@ -101,7 +102,7 @@ export default class Game {
    * @returns {RoundConfig}
    */
   newRound(startingPLayer = 0) {
-    if (startingPLayer < 0 || startingPLayer > this.players.length)
+    if (startingPLayer < 0 || startingPLayer >= this.players.length)
       throw new RangeError(
         'The starting player index must be in the range of the players\' ' +
         'indexes.');
@@ -120,12 +121,12 @@ export default class Game {
       drawPile.push(new Card(color, '0'));
 
       for (let symbol of '12345678rs'.split('').concat('+2')) {
-        drawPile.push(new Card(color, symbol))
-        drawPile.push(new Card(color, symbol))
+        drawPile.push(new Card(color, symbol));
+        drawPile.push(new Card(color, symbol));
       }
 
       for (let symbol of ['w', '+4'])
-        for (let _ in Array(4).fill())
+        for (let i = 0; i < 4; i++)
           drawPile.push(new Card('wild', symbol));
     }
     shuffle(drawPile);
@@ -135,12 +136,12 @@ export default class Game {
     const playersCards = new Array(players.length).fill([]);
 
     // Give 7 cards from draw pile to each players
-    for (let playerId in this.roundConfig.players)
-      for (let _ of Array(7).fill())
+    for (let playerId in players)
+      for (let i = 0; i < 7; i++)
         playersCards[playerId].push(drawPile.pop());
 
     let mustCallsUno = null;
-    
+
     const winners = [];
 
     this.roundConfig = {
@@ -156,25 +157,25 @@ export default class Game {
     };
 
     // Take the first discard card from the drawing pile.
-    function firstDiscard() {
+    const firstDiscard = () => {
       discardPile.push(drawPile.pop());
       if (actionCards.includes(discardPile[0].symbol))
         switch (discardPile[0].symbol) {
           case 'r':
             this.roundConfig.isTurnClockwise = false;
+          // falls through
           case 's':
             this.endTurn();
             break;
           case '+2':
             this.draw(this.roundConfig.turn, 2);
-            this.endTurn();
             break;
           case '+4':
             drawPile.push(discardPile.pop());
-            shuffle(discardPile);
+            shuffle(drawPile);
             firstDiscard();
         }
-    }
+    };
     firstDiscard();
 
     return this.roundConfig;
@@ -225,7 +226,7 @@ export default class Game {
         if (end) this.endTurn();
         else this.play(
           this.getPlayerCards(playerId).length - 1, null, playerId);
-      }
+      };
       return shouldEndTurn;
     } else this.endTurn();
     return null;
@@ -248,11 +249,12 @@ export default class Game {
       throw new Error('No available round found in this game');
 
     if (playerId !== this.roundConfig.turn)
-      throw new Error('Is not currently `' + this.roundConfig.players[playerId] + '` turn.'
-        + ' Cannot jump-in');
+      throw new Error(
+        `Is not currently ${this.roundConfig.players[playerId]} turn.` +
+        ' Cannot jump-in');
 
     if (cardId < 0 || cardId >= this.getPlayerCards().length)
-      throw new RangeError('No card found with the specified id: ' + id);
+      throw new RangeError('No card found with the specified id: ' + cardId);
 
     this.#checksUnoCall();
 
@@ -329,8 +331,8 @@ export default class Game {
   }
 
   /**
-   * Calls 'UNO' for the specified player after playing their penultimate card to avoids
-   * penalties and warns other players.
+   * Calls 'UNO' for the specified player after playing their penultimate card
+   *    to avoids penalties and warns other players.
    * @param {number} playerId - The index of the player who will calls 'UNO'.
    */
   callUno(playerId) {
@@ -370,12 +372,11 @@ export default class Game {
     let currPlayer = this.roundConfig.turn;
 
     // Checks if the current player in turn has only one remaining card.
-    if (this.getPlayerCards[currPlayer].length === 1)
+    if (this.getPlayerCards(currPlayer).length === 1)
       this.roundConfig.mustCallsUno = currPlayer;
-    if (this.getPlayerCards[currPlayer].length === 0) {
+    if (this.getPlayerCards(currPlayer).length === 0) {
       this.roundConfig.winners.push(
-        this.roundConfig.players[
-          this.roundConfig.turn]);
+        this.roundConfig.players[this.roundConfig.turn]);
       this.roundConfig.players.splice(this.roundConfig.turn, 1);
 
       if (this.roundConfig.players.length < 2) {
@@ -403,7 +404,7 @@ export default class Game {
     w: () => { },
     '+2': this.#drawTwoEffect,
     '+4': this.#drawFourEffect,
-  }
+  };
 
   /**
    * Triggers the side effect/action for reverse cards.
