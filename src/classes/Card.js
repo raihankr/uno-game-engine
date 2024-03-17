@@ -73,7 +73,7 @@ export default class Card {
    * @returns {string}
    */
   static toString() {
-    return 'Card';
+    return '<class Card>';
   }
 
   /**

@@ -110,7 +110,7 @@ export default class Game {
   newRound(startingPLayer = 0) {
     if (startingPLayer < 0 || startingPLayer >= this.players.length)
       throw new RangeError(
-        'The starting player index must be in the range of the players\' ' +
+        'The starting player index must be in the range of players\' ' +
         'indexes.');
 
     let isTurnClockwise = true;
