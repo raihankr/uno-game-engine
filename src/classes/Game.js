@@ -44,6 +44,9 @@ export default class Game {
      */
     this.roundConfig = null;
 
+    if (this.players.length !== players.length)
+      throw new Error('Cannot have duplicate players\' name.');
+
     if (this.players?.length < 2)
       throw new RangeError('Too few players. Minimal 2 players');
     if (this.players?.length > 10)
@@ -92,6 +95,9 @@ export default class Game {
    * @returns {Card[]}
    */
   getPlayerCardsByName(playerName) {
+    if (!this.roundConfig || this.roundConfig?.isFinished)
+      throw new Error('No available round found in this game');
+
     return this.getPlayerCards(this.roundConfig.players.indexOf(playerName));
   }
 
@@ -244,7 +250,7 @@ export default class Game {
    *    of the current player in turn.
    * @returns {Card}
    */
-  play(cardId, color = null, playerId = this.roundConfig.turn) {
+  play(cardId, color = null, playerId = this.roundConfig?.turn) {
     if (!this.roundConfig || this.roundConfig?.isFinished)
       throw new Error('No available round found in this game');
 

@@ -1,38 +1,44 @@
-import Game from "./Game";
+import Game from './Game';
 
-/** @type {Game} */
-var game;
-const players = ['Player 1', 'Player 2', 'Player 3'];
+let players = ['Player 1', 'Player 2', 'PLayer 3'];
+let game = new Game(players);
 
-//TODO: Make the tests for the Game class
-describe('Game class initialization', () => {
-  test.each([
-    [11, new Array(11).fill('')],
-    [1, ['']]
-  ])('Create a game with %d players to throw an error', (n, arr) => {
-    expect(() => game = new Game(arr))
-      .toThrow(/Too (few|much) players/i);
-  });
-
-  test('Succesfully create a game with 3 players', () => {
-    expect(() => game = new Game(players))
-      .not.toThrow();
-  });
-});
-
-describe('Start a new round of game', () => {
-  test('Create a new round', () => {
-    expect(game.newRound(3)).toThrow(RangeError);
-    expect(game.newRound(2)).not.toThrow();
-  });
-
-  describe('Checks some RoundConfig props', () => {
-    test.each([
-      ['players', players],
-      ['drawPile', game.drawPile],
-      ['discardPile', game.discardPile]
-    ])('%s props has a valid type structure', (prop, ref) => {
-      expect(game.roundConfig[prop]).toStrictEqual(ref);
+describe('Game', () => {
+  describe('#constructor', () => {
+    test('error duplicate player', () => {
+      expect(() => new Game(['P1', 'P1']))
+        .toThrow(/Cannot have duplicate players' name/);
     });
-  })
+
+    test.each([
+      ['< 2', ['P1']],
+      ['> 10', '0123456789a'.split('')],
+    ])('error players %s', (desc, players) => {
+      expect(() => new Game(players))
+        .toThrow(/Too (few|much) players/);
+    });
+  });
+
+  describe('RoundConfig-dependant methods/getters availability error', () => {
+    let game = new Game(players);
+
+    test.each([
+      'drawPile',
+      'discardPile'
+    ])('#%s', prop => {
+      expect(() => game[prop]).toThrow(/No available round found/);
+    });
+
+    test.each([
+      'getPlayerCards',
+      'getPlayerCardsByName',
+      'draw',
+      'play',
+      'isPlayable',
+      'callUno',
+      'endTurn'
+    ])('#%s()', prop => {
+      expect(() => game[prop]()).toThrow(/No available round found/);
+    });
+  });
 });
