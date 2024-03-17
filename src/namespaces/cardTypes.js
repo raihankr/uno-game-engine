@@ -19,7 +19,7 @@ export const cardTypes = {
   w: 'Wild',
   '+2': 'Draw Two',
   '+4': 'Wild Draw Four'
-}
+};
 
 export const actionCards = [
   'r', 's', 'w',
