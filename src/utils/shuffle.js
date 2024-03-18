@@ -4,7 +4,7 @@
  * @param {any[]} array - The array to be shuffled
  * @returns {any[]}
  */
-export default function shuffle(array) {
+export function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
 
   // While there remain elements to shuffle.

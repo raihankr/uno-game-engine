@@ -1,7 +1,7 @@
 /**
  * The types of action cards in a `[symbol]: [name]` pairs.
  * @namespace
- * @type {object<string|number, string>}
+ * @type {Object<string|number,string>}
  */
 export const cardTypes = {
   0: 'Zero',
@@ -21,6 +21,11 @@ export const cardTypes = {
   '+4': 'Wild Draw Four'
 };
 
+/**
+ * List of action cards' symbol
+ * @namespace
+ * @type {string[]}
+ */
 export const actionCards = [
   'r', 's', 'w',
   '+2', '+4'
