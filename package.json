@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js *.integration.test.js"
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js *.integration.test.js",
+    "jsdoc": "jsdoc -c jsdoc.json -d docs"
   },
   "exports": {
     ".": "./index.js",
@@ -29,7 +30,9 @@
     "@typescript-eslint/parser": "^7.2.0",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
-    "jsdoc": "~4.0.2"
+    "jsdoc": "~4.0.2",
+    "taffydb": "^2.7.3",
+    "tui-jsdoc-template": "^1.2.2"
   },
   "dependencies": {
     "titleize": "^4.0.0"
