@@ -132,3 +132,6 @@ dist
 # VSCode
 .vscode
 Uno\ Game\ Engine.code-workspace
+
+# Documentation (separated in different repo)
+docs
