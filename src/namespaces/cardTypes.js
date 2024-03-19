@@ -1,7 +1,21 @@
 /**
- * The types of action cards in a `[symbol]: [name]` pairs.
+ * The types of action cards in a `[symbol]: [name]` pairs.\
+ * Warning: You shouldn't modify any of existing values.
  * @namespace
  * @type {Object<string|number,string>}
+ * @readonly
+ * @example
+ * // example
+ * cardTypes = {
+ *   0: 'Zero',
+ *   1: 'One',
+ *   ...,
+ *   r: 'Reverse',
+ *   s: 'Skip',
+ *   w: 'Wild',
+ *   '+2': 'Draw two',
+ *   '+4': 'Wild Draw Four'
+ * }
  */
 export const cardTypes = {
   0: 'Zero',
@@ -22,9 +36,13 @@ export const cardTypes = {
 };
 
 /**
- * List of action cards' symbol
+ * List of action cards' symbol.\
+ * Warning: You shouldn't modify any of existing values.
  * @namespace
  * @type {string[]}
+ * @readonly
+ * @example
+ * actionCards = ['r', 's', 'w', '+3', '+4']
  */
 export const actionCards = [
   'r', 's', 'w',

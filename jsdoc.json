@@ -19,6 +19,9 @@
         "footerText": "©2024 Raihan Khairul Rochman",
         "useCollapsibles": true,
         "logo": {
+            "url": "img/github-mark-white.png",
+            "width": "13px",
+            "height": "13px",
             "link": "https://raihankr.github.io/uno-game-engine"
         }
     },

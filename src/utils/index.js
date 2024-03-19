@@ -1,3 +1,3 @@
 /** @module utils */
 
-export * from './shuffle.js';
+export { shuffle } from './shuffle';

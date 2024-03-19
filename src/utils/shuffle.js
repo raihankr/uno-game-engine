@@ -3,6 +3,7 @@
  * Returns the shuffled array.
  * @param {any[]} array - The array to be shuffled
  * @returns {any[]}
+ * @memberof module:utils
  */
 export function shuffle(array) {
   let currentIndex = array.length,  randomIndex;

@@ -49,7 +49,7 @@ describe('Game', () => {
   });
 
   describe('#discardPile', () => {
-
+    
   });
 
   describe('roundConfig-dependant methods/getters availability error', () => {
