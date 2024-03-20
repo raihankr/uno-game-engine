@@ -49,7 +49,26 @@ describe('Game', () => {
   });
 
   describe('#discardPile', () => {
-    
+    test('checks reference', () => {
+      expect(game.discardPile).toStrictEqual(game.roundConfig.discardPile);
+    });
+  });
+
+  describe('#getPlayerCards', () => {
+    test('error `player` out of range', () => {
+      expect(() => game.getPLayerCards(3)).toThrow(/No player found/);
+      expect(() => game.getPLayerCards(-1)).toThrow(/No player found/);
+    });
+
+    test('checks reference', () => {
+      expect(game.getPLayerCards(2)).toStrictEqual(game.roundConfig.players[2]);
+    });
+  });
+
+  describe('#isPLayable', () => {
+    test('type error', () => {
+      
+    });
   });
 
   describe('roundConfig-dependant methods/getters availability error', () => {
