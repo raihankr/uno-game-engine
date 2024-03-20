@@ -1,4 +1,56 @@
-import { actionCards } from '../namespaces/cardTypes';
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: classes/Game.js | Uno Game Engine</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="width: 13px; height: 13px">
+        
+            <a href="https://github.com/raihankr/uno-game-engine" rel="noopener noreferrer" target="_blank">
+                <img src="img/github-mark-white.png" width="100%" height="100%">
+            </a>
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">Uno Game Engine</a></h1>
+        
+            <span class="version">v1.0.0</span>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-utils.html">utils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:utils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-utils.html#.exports.shuffle">exports.shuffle</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Card.html">Card</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Card_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Card.html#color">color</a></li><li><a href="Card.html#name">name</a></li><li><a href="Card.html#number">number</a></li><li><a href="Card.html#points">points</a></li><li><a href="Card.html#symbol">symbol</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Card.html#toString">toString</a></li><li><a href="Card.html#.toString">toString</a></li></ul></div></li><li><a href="Game.html">Game</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Game_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Game.html#discardPile">discardPile</a></li><li><a href="Game.html#drawPile">drawPile</a></li><li><a href="Game.html#players">players</a></li><li><a href="Game.html#roundConfig">roundConfig</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Game.html#callUno">callUno</a></li><li><a href="Game.html#draw">draw</a></li><li><a href="Game.html#endTurn">endTurn</a></li><li><a href="Game.html#getPlayerCards">getPlayerCards</a></li><li><a href="Game.html#getPlayerCardsByName">getPlayerCardsByName</a></li><li><a href="Game.html#isPlayable">isPlayable</a></li><li><a href="Game.html#newRound">newRound</a></li><li><a href="Game.html#play">play</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="Game.html#.RoundConfig">RoundConfig</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Namespaces</h3><ul><li><a href="actionCards.html">actionCards</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="actionCards_sub"></div></li><li><a href="cardTypes.html">cardTypes</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="cardTypes_sub"></div></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { actionCards } from '../namespaces/cardTypes';
 import shuffle from '../utils/shuffle';
 import { Card } from './Card';
 
@@ -14,7 +66,7 @@ import { Card } from './Card';
  *    current turn.
  * @property {Card[]} drawPile - Array of Cards in the draw pile.
  * @property {Card[]} discardPile - Array of Cards in the discard pile.
- * @property {Array<Card[]>} playersCards - Array of player's cards.
+ * @property {Array&lt;Card[]>} playersCards - Array of player's cards.
  * @property {number|null} mustCallsUno - The index of the player who must calls
  *    'UNO' because they have only one card remaining on their hands.
  * @property {string[]} winners - Indexes of players whose already wins the
@@ -48,7 +100,7 @@ export class Game {
     if (this.players.length !== players.length)
       throw new Error('Cannot have duplicate players\' name.');
 
-    if (this.players?.length < 2)
+    if (this.players?.length &lt; 2)
       throw new RangeError('Too few players. Minimal 2 players');
     if (this.players?.length > 10)
       throw new RangeError('Too much players. Maximal 10 players');
@@ -83,7 +135,7 @@ export class Game {
     if (!this.roundConfig || this.roundConfig?.isFinished)
       throw new Error('No available round found in this game');
 
-    if (playerId >= this.roundConfig.players.length || playerId < 0)
+    if (playerId >= this.roundConfig.players.length || playerId &lt; 0)
       throw new RangeError(
         'No player found with the specified id: ' + playerId);
 
@@ -109,7 +161,7 @@ export class Game {
    * @returns {RoundConfig}
    */
   newRound(startingPLayer = 0) {
-    if (startingPLayer < 0 || startingPLayer >= this.players.length)
+    if (startingPLayer &lt; 0 || startingPLayer >= this.players.length)
       throw new RangeError(
         'The starting player index must be in the range of players\' ' +
         'indexes.');
@@ -133,7 +185,7 @@ export class Game {
       }
 
       for (let symbol of ['w', '+4'])
-        for (let i = 0; i < 4; i++)
+        for (let i = 0; i &lt; 4; i++)
           drawPile.push(new Card('wild', symbol));
     }
     shuffle(drawPile);
@@ -144,7 +196,7 @@ export class Game {
 
     // Give 7 cards from draw pile to each players
     for (let playerId in players)
-      for (let i = 0; i < 7; i++)
+      for (let i = 0; i &lt; 7; i++)
         playersCards[playerId].push(drawPile.pop());
 
     let mustCallsUno = null;
@@ -218,8 +270,8 @@ export class Game {
     // Handle if the player in turn should play the drawed card or just
     // skip to next player turn.
     if (
-      playerId == this.turn &&
-      amount == 1 &&
+      playerId == this.turn &amp;&amp;
+      amount == 1 &amp;&amp;
       this.isPlayable(drawedCards)
     ) {
       /**
@@ -260,7 +312,7 @@ export class Game {
         `Is not currently ${this.roundConfig.players[playerId]} turn.` +
         ' Cannot jump-in');
 
-    if (cardId < 0 || cardId >= this.getPlayerCards().length)
+    if (cardId &lt; 0 || cardId >= this.getPlayerCards().length)
       throw new RangeError('No card found with the specified id: ' + cardId);
 
     this.#checksUnoCall();
@@ -334,7 +386,7 @@ export class Game {
 
     else throw new TypeError(
       'Parameter `cards` cannot accept the received object type. ' +
-      'Accepted types: `Card` or `Array<Card>`');
+      'Accepted types: `Card` or `Array&lt;Card>`');
   }
 
   /**
@@ -386,7 +438,7 @@ export class Game {
         this.roundConfig.players[this.roundConfig.turn]);
       this.roundConfig.players.splice(this.roundConfig.turn, 1);
 
-      if (this.roundConfig.players.length < 2) {
+      if (this.roundConfig.players.length &lt; 2) {
         this.roundConfig.winners.push(...this.roundConfig.players);
         return this.roundConfig.isFinished = true;
       }
@@ -396,7 +448,7 @@ export class Game {
     this.roundConfig.turn +=
       this.roundConfig.isTurnClockwise ? 1 : -1;
 
-    if (this.roundConfig.turn < 0)
+    if (this.roundConfig.turn &lt; 0)
       this.roundConfig.turn = this.roundConfig.players.length - 1;
     else if (this.roundConfig.turn >= this.roundConfig.players.length)
       this.roundConfig.turn = 0;
@@ -448,4 +500,33 @@ export class Game {
     this.draw(this.roundConfig.turn, 4);
     this.endTurn();
   }
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/github-mark-white.png" style="width: 13px; height: 13px">
+    <div class="footer-text">©2024 Raihan Khairul Rochman</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>
