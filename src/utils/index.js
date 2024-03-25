@@ -1,3 +1,7 @@
 /** @module utils */
 
-export { shuffle } from './shuffle';
+import shuffle from './shuffle';
+
+export default {
+  shuffle,
+};

@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from './Card';
 
 describe('Card', () => {
   describe('#constructor', () => {
@@ -6,8 +6,8 @@ describe('Card', () => {
       test.each([
         'Black',
         'Colorful',
-        'Purple'
-      ])('`%s` color is invalid', color => {
+        'Purple',
+      ])('`%s` color is invalid', (color) => {
         expect(() => new Card(color, '1')).toThrow(/invalid color/i);
       });
     });
@@ -15,7 +15,7 @@ describe('Card', () => {
     describe('checks wild card', () => {
       test.each([
         ['Wild Draw Four', '+4'],
-        ['Wild', 'w']
+        ['Wild', 'w'],
       ])('%s card has `wild` color', (name, symbol) => {
         expect(new Card('blue', symbol).color).toBe('wild');
       });
@@ -26,7 +26,7 @@ describe('Card', () => {
         ['Number One', '1'],
         ['Reverse', 'r'],
         ['Skip', 's'],
-        ['Draw two', '+2']
+        ['Draw two', '+2'],
       ])('`%s` cards cannot be `wild`', (name, symbol) => {
         expect(() => new Card('wild', symbol))
           .toThrow(/Card cannot have `wild` color/i);
@@ -37,10 +37,10 @@ describe('Card', () => {
   describe('#points', () => {
     ([
       'Zero', 'One', 'Two', 'Three', 'Four',
-      'Five', 'Six', 'Seven', 'Eight', 'Nine'
+      'Five', 'Six', 'Seven', 'Eight', 'Nine',
     ]).forEach((name, n) => {
       test(`Number ${name} card has ${n} points`, () => {
-        expect(new Card('yellow', n + '')).toHaveProperty('points', n);
+        expect(new Card('yellow', `${n}`)).toHaveProperty('points', n);
       });
     });
 
@@ -70,7 +70,7 @@ describe('Card', () => {
 
   describe('.toString', () => {
     test('class Card string representation', () => {
-      expect(Card + '').toBe('<class Card>');
+      expect(`${Card}`).toBe('<class Card>');
     });
   });
 });

@@ -1,6 +1,7 @@
+/* eslint-disable no-shadow */
 import Game from './Game';
 
-let players = ['Player 1', 'Player 2', 'PLayer 3'];
+const players = ['Player 1', 'Player 2', 'PLayer 3'];
 /** @type {Game} */
 let game;
 
@@ -67,16 +68,16 @@ describe('Game', () => {
 
   describe('#isPLayable', () => {
     test('type error', () => {
-      
+
     });
   });
 
   describe('roundConfig-dependant methods/getters availability error', () => {
-    let game = new Game(players);
+    const game = new Game(players);
     test.each([
       'drawPile',
-      'discardPile'
-    ])('#%s', prop => {
+      'discardPile',
+    ])('#%s', (prop) => {
       expect(() => game[prop]).toThrow(/No available round found/);
     });
 
@@ -87,8 +88,8 @@ describe('Game', () => {
       'play',
       'isPlayable',
       'callUno',
-      'endTurn'
-    ])('#%s()', prop => {
+      'endTurn',
+    ])('#%s()', (prop) => {
       expect(() => game[prop]()).toThrow(/No available round found/);
     });
   });

@@ -5,20 +5,21 @@
  * @returns {any[]}
  * @memberof module:utils
  */
-export function shuffle(array) {
-  let currentIndex = array.length,  randomIndex;
+export default function shuffle(array) {
+  const result = array;
+  let currentIndex = array.length;
+  let randomIndex;
 
   // While there remain elements to shuffle.
   while (currentIndex > 0) {
-
     // Pick a remaining element.
     randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+    currentIndex += 1;
 
     // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
+    [result[currentIndex], result[randomIndex]] = [
+      result[randomIndex], result[currentIndex]];
   }
 
-  return array;
+  return result;
 }

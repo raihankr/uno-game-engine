@@ -1,3 +1,10 @@
-export * from './src/classes/Game';
-export * from './src/classes/Card';
-export * from './src/namespaces/cardTypes';
+import Game from './src/classes/Game';
+import Card from './src/classes/Card';
+import { cardTypes, actionCards } from './src/namespaces/cardTypes';
+
+export default {
+  Game,
+  Card,
+  cardTypes,
+  actionCards,
+};

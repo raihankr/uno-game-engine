@@ -1,5 +1,8 @@
 {
-    "plugins": ["plugins/markdown"],
+    "plugins": [
+        "plugins/markdown",
+        "./node_modules/jsdoc-export-default-interop/dist/index"
+    ],
     "recurseDepth": 10,
     "source": {
         "include": [

@@ -4,7 +4,7 @@ import { actionCards, cardTypes } from '../namespaces/cardTypes';
 /**
  * UNO card class.
  */
-export class Card {
+export default class Card {
   /**
    * Creates a new UNO Card.
    * @param {string} color - The color of the card.
@@ -13,46 +13,50 @@ export class Card {
    *    Check {@link cardTypes} for lists of valid symbols and its name.
    */
   constructor(color, symbol) {
-    color = color.toLowerCase();
-    symbol = symbol.toLowerCase();
+    let Color = color.toLowerCase();
+    const Symbol = symbol.toLowerCase();
 
     // Automatically change the `color` to `wild` if its a wild card.
-    if (['w', '+4'].includes(symbol))
-      color = 'wild';
-    else if (color == 'wild')
-      throw new Error(`${cardTypes[symbol]} Card cannot have \`wild\` color`);
+    if (['w', '+4'].includes(Symbol)) Color = 'wild';
+    else if (Color === 'wild') {
+      throw new Error(`${cardTypes[Symbol]} Card cannot have \`wild\` color`);
+    }
 
-    if (!'red,yellow,green,blue,wild'.split(',').includes(color))
+    if (!'red,yellow,green,blue,wild'.split(',').includes(Color)) {
       throw new RangeError(
-        'Invalid color value. ' +
-        'Must be either `red`, `yellow`. `green`, `blue`, or `wild`');
+        'Invalid color value. '
+        + 'Must be either `red`, `yellow`. `green`, `blue`, or `wild`',
+      );
+    }
 
     /**
      * The color of the card.
      * @type {string}
      */
-    this.color = color;
+    this.color = Color;
 
     /**
      * The number (in `string`) or symbol of the card.
      * @type {string}
      */
-    this.symbol = symbol;
+    this.symbol = Symbol;
 
-    if (symbol.length == 1 && !isNaN(parseInt(symbol)))
+    if (Symbol.length === 1 && !Number.isNaN(parseInt(Symbol, 10))) {
       /**
-       * The number of the card. An alias for {@link symbol}
+       * The number of the card. An alias for {@link Symbol}
        *    properties if the card is a number card.
        * @type {number}
        */
-      this.number = parseInt(symbol);
+      this.number = parseInt(Symbol, 10);
+    }
 
     /**
      * The name of the card.
      * @type {string}
      */
     this.name = titleize(
-      `${color === 'wild' ? '' : color} ${cardTypes[symbol]} Card`).trim();
+      `${Color === 'wild' ? '' : Color} ${cardTypes[Symbol]} Card`,
+    ).trim();
 
     // Define the points for each type of cards.
     /**
@@ -60,12 +64,10 @@ export class Card {
      * @type {number}
      */
     this.points = 0;
-    if (actionCards.includes(symbol))
-      if (['w', '+4'].includes(symbol))
-        this.points = 50;
+    if (actionCards.includes(Symbol)) {
+      if (['w', '+4'].includes(Symbol)) this.points = 50;
       else this.points = 20;
-    else
-      this.points = parseInt(symbol);
+    } else this.points = parseInt(Symbol, 10);
   }
 
   /**

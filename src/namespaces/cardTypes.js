@@ -32,7 +32,7 @@ export const cardTypes = {
   s: 'Skip',
   w: 'Wild',
   '+2': 'Draw Two',
-  '+4': 'Wild Draw Four'
+  '+4': 'Wild Draw Four',
 };
 
 /**
@@ -46,5 +46,5 @@ export const cardTypes = {
  */
 export const actionCards = [
   'r', 's', 'w',
-  '+2', '+4'
+  '+2', '+4',
 ];
