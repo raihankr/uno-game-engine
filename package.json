@@ -18,7 +18,7 @@
     "url": "git+https://github.com/raihankr/uno-game-engine.git"
   },
   "author": "Raihan Khairul Rochman",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/raihankr/uno-game-engine/issues"
   },
