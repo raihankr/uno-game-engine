@@ -1,7 +1,8 @@
 /* eslint-disable no-shadow */
+import Card from './Card';
 import Game from './Game';
 
-const players = ['Player 1', 'Player 2', 'PLayer 3'];
+const players = ['Player 1', 'Player 2', 'Player 3'];
 /** @type {Game} */
 let game;
 
@@ -57,18 +58,62 @@ describe('Game', () => {
 
   describe('#getPlayerCards', () => {
     test('error `player` out of range', () => {
-      expect(() => game.getPLayerCards(3)).toThrow(/No player found/);
-      expect(() => game.getPLayerCards(-1)).toThrow(/No player found/);
+      expect(() => game.getPlayerCards(3)).toThrow(/No player found/);
+      expect(() => game.getPlayerCards(-1)).toThrow(/No player found/);
     });
 
     test('checks reference', () => {
-      expect(game.getPLayerCards(2)).toStrictEqual(game.roundConfig.players[2]);
+      expect(game.getPlayerCards(2))
+        .toStrictEqual(game.roundConfig.playersCards[2]);
     });
   });
 
-  describe('#isPLayable', () => {
-    test('type error', () => {
+  describe('#getPlayerCardsByName', () => {
+    test('error `player` out of range', () => {
+      expect(() => game.getPlayerCardsByName('Anonymous'))
+        .toThrow(/No player found/);
+    });
 
+    test('checks reference', () => {
+      expect(game.getPlayerCardsByName('Player 1'))
+        .toStrictEqual(game.getPlayerCards(0));
+    });
+  });
+
+  describe('#isPlayable', () => {
+    beforeAll(() => {
+      game.discardPile.push(new Card('green', '1'));
+    });
+
+    const unplayableCards = [
+      new Card('red', 's'),
+      new Card('yellow', '3'),
+      new Card('blue', '+2'),
+    ];
+
+    const playableCards = [
+      new Card('green', 'r'),
+      new Card('blue', '1'),
+      new Card('green', '1'),
+      new Card('wild', 'w'),
+    ];
+
+    test('checks playable cards among an array', () => {
+      expect(game
+        .isPlayable(unplayableCards.concat(playableCards)))
+        .toEqual(Array(3).fill(false).concat(playableCards));
+    });
+
+    test.each(
+      unplayableCards,
+    )('%s is unplayable against Green One Card', (card) => {
+      expect(game.isPlayable(card)).toBeFalsy();
+    });
+
+    test.each(
+      playableCards,
+    )('%s is playable against Green One Card', (card) => {
+      expect(game.isPlayable(card)).toBeTruthy();
     });
   });
 
