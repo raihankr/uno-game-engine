@@ -5,7 +5,6 @@ import Card from './Card';
 /**
  * The configuration object for a round in a game.
  * @typedef {Object} RoundConfig
- * @memberof Game
  * @property {boolean} isFinished - Returns `true` if the round is finished.
  * @property {boolean} isTurnClockwise - Returns `true` if the direction of play
  *    is in clockwise direction.
@@ -335,7 +334,7 @@ export default class Game {
       throw new Error('No available round found in this game');
     }
 
-    const lastCard = this.roundConfig.discardPile.slice(-1);
+    const lastCard = this.roundConfig.discardPile.slice(-1)[0];
 
     if (cards instanceof Array) {
       return cards.map((card) => {
