@@ -2,7 +2,8 @@
 import shuffle from './shuffle';
 
 const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-let array1; let array2;
+let array1;
+let array2;
 
 console.log(`Original array: ${array}`);
 
