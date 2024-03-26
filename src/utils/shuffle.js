@@ -14,7 +14,7 @@ export default function shuffle(array) {
   while (currentIndex > 0) {
     // Pick a remaining element.
     randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex += 1;
+    currentIndex -= 1;
 
     // And swap it with the current element.
     [result[currentIndex], result[randomIndex]] = [
