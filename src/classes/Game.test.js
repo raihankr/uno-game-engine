@@ -1,6 +1,8 @@
+// UNFINISHED
+
 /* eslint-disable no-shadow */
-import Card from './Card';
-import Game from './Game';
+import Card from './Card.js';
+import Game from './Game.js';
 
 const players = ['Player 1', 'Player 2', 'Player 3'];
 /** @type {Game} */
@@ -116,6 +118,22 @@ describe('Game', () => {
       expect(game.isPlayable(card)).toBeTruthy();
     });
   });
+
+  // TODO: #draw
+  describe('#draw', () => {
+
+  });
+
+  // TODO: #play
+  describe('#play', () => {
+    test('Prevent jump-in', () => {
+
+    });
+  });
+
+  // TODO: #callUno
+
+  // TODO: #endTurn
 
   describe('roundConfig-dependant methods/getters availability error', () => {
     const game = new Game(players);

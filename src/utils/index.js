@@ -1,7 +1,4 @@
 /** @module utils */
 
-import shuffle from './shuffle';
-
-export default {
-  shuffle,
-};
+// eslint-disable-next-line import/prefer-default-export
+export { default as shuffle } from './shuffle.js';

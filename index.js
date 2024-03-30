@@ -1,10 +1,3 @@
-import Game from './src/classes/Game';
-import Card from './src/classes/Card';
-import { cardTypes, actionCards } from './src/namespaces/cardTypes';
-
-export default {
-  Game,
-  Card,
-  cardTypes,
-  actionCards,
-};
+export { default as Game } from './src/classes/Game.js';
+export { default as Card } from './src/classes/Card.js';
+export { cardTypes, actionCards } from './src/namespaces/cardTypes.js';

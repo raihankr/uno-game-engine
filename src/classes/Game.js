@@ -1,6 +1,6 @@
-import { actionCards } from '../namespaces/cardTypes';
-import shuffle from '../utils/shuffle';
-import Card from './Card';
+import { actionCards } from '../namespaces/cardTypes.js';
+import shuffle from '../utils/shuffle.js';
+import Card from './Card.js';
 
 /**
  * The configuration object for a round in a game.
@@ -8,7 +8,8 @@ import Card from './Card';
  * @property {boolean} isFinished - Returns `true` if the round is finished.
  * @property {boolean} isTurnClockwise - Returns `true` if the direction of play
  *    is in clockwise direction.
- * @property {string[]} players - Array of players' name in the current round.
+ * @property {Object<string,boolean>} players - Array of players' name in the
+ *    current round.
  * @property {number} turn - Returns the index of player in the game in the
  *    current turn.
  * @property {Card[]} drawPile - Array of Cards in the draw pile.
@@ -87,7 +88,7 @@ export default class Game {
       throw new Error('No available round found in this game');
     }
 
-    if (playerId >= this.roundConfig.players.length || playerId < 0) {
+    if (playerId >= this.players.length || playerId < 0) {
       throw new RangeError(
         `No player found with the specified id: ${playerId}`,
       );
@@ -106,17 +107,17 @@ export default class Game {
       throw new Error('No available round found in this game');
     }
 
-    return this.getPlayerCards(this.roundConfig.players.indexOf(playerName));
+    return this.getPlayerCards(this.players.indexOf(playerName));
   }
 
   /**
    * Initialize a new UNO game round.
-   * @param {number} startingPLayer - The index of the first player to
+   * @param {number} startingPlayer - The index of the first player to
    *    play in the round.
    * @returns {RoundConfig}
    */
-  newRound(startingPLayer = 0) {
-    if (startingPLayer < 0 || startingPLayer >= this.players.length) {
+  newRound(startingPlayer = 0) {
+    if (startingPlayer < 0 || startingPlayer >= this.players.length) {
       throw new RangeError(
         'The starting player index must be in the range of players\' '
         + 'indexes.',
@@ -124,9 +125,9 @@ export default class Game {
     }
 
     const isTurnClockwise = true;
-    const turn = startingPLayer;
+    const turn = startingPlayer;
 
-    const players = [...this.players];
+    const players = Array(this.players.length).fill(true);
 
     const drawPile = [];
 
@@ -136,23 +137,25 @@ export default class Game {
     'red,yellow,green,blue'.split(',').forEach((color) => {
       drawPile.push(new Card(color, '0'));
 
-      '12345678rs'.split('').concat('+2').forEach((symbol) => {
+      '123456789rs'.split('').concat('+2').forEach((symbol) => {
         drawPile.push(new Card(color, symbol));
         drawPile.push(new Card(color, symbol));
       });
+    });
 
-      ['w', '+4'].forEach((symbol) => {
-        for (let i = 0; i < 4; i += 1) drawPile.push(new Card('wild', symbol));
-      });
+    ['w', '+4'].forEach((symbol) => {
+      for (let i = 0; i < 4; i += 1) drawPile.push(new Card('wild', symbol));
     });
     shuffle(drawPile);
 
     const discardPile = [];
 
-    const playersCards = new Array(players.length).fill([]);
+    const playersCards = new Array(this.players.length)
+      .fill(null)
+      .map(() => []);
 
-    // Give 7 cards from draw pile to each players
-    players.forEach((_, playerId) => {
+    // Give 7 cards from draw pile to each this.players
+    this.players.forEach((_, playerId) => {
       for (let i = 0; i < 7; i += 1) {
         playersCards[playerId].push(drawPile.pop());
       }
@@ -186,7 +189,7 @@ export default class Game {
             this.endTurn();
             break;
           case '+2':
-            this.draw(this.roundConfig.turn, 2);
+            this.draw(2);
             break;
           case '+4':
             drawPile.push(discardPile.pop());
@@ -207,10 +210,10 @@ export default class Game {
    * Draw a specified amount of cards from the draw pile to the specified
    *    player.\
    * Returns an array of cards that drawed.
-   * @param {number} playerId - The index or the name of the player.
    * @param {number} [amount] - The amount of the cards to be drawed.
+   * @param {number} playerId - The index or the name of the player.
    */
-  draw(playerId, amount) {
+  draw(amount = 1, playerId = this.roundConfig?.turn) {
     if (!this.roundConfig || this.roundConfig?.isFinished) {
       throw new Error('No available round found in this game');
     }
@@ -235,24 +238,9 @@ export default class Game {
     // skip to next player turn.
     if (
       playerId === this.turn
-      && amount === 1
-      && this.isPlayable(drawedCards)
-    ) {
-      /**
-       * Decide whether the player wants to play the drawed card immediately or
-       *    just keep the drawed cards and end the current turn.
-       * @param {boolean} end - `false` if the player wants to play the drawed
-       *    card immediately. Otherwise `true` will keep the drawed cards and
-       *    end the current turn
-       */
-      const shouldEndTurn = (end = false) => {
-        if (end) this.endTurn();
-        else {
-          this.play(this.getPlayerCards(playerId).length - 1, null, playerId);
-        }
-      };
-      return shouldEndTurn;
-    } this.endTurn();
+      && !(amount === 1
+        && this.isPlayable(drawedCards))
+    ) this.endTurn();
     return null;
   }
 
@@ -275,12 +263,12 @@ export default class Game {
 
     if (playerId !== this.roundConfig.turn) {
       throw new Error(
-        `Is not currently ${this.roundConfig.players[playerId]} turn.`
+        `Is not currently ${this.players[playerId]} turn.`
         + ' Cannot jump-in',
       );
     }
 
-    if (cardId < 0 || cardId >= this.getPlayerCards().length) {
+    if (cardId < 0 || cardId >= this.getPlayerCards(playerId).length) {
       throw new RangeError(`No card found with the specified id: ${cardId}`);
     }
 
@@ -306,7 +294,7 @@ export default class Game {
       // A wild card will automatically change its color properties after
       // the player decides what color to play next.
       || lastCard.color === 'wild'
-    ) this.discardPile.push(this.getPlayerCards().splice(cardId, 1)[0]);
+    ) this.discardPile.push(this.getPlayerCards(playerId).splice(cardId, 1)[0]);
     else throw new Error('The specified card is not currently playable');
 
     // If the played card is a wild card,
@@ -388,7 +376,8 @@ export default class Game {
     if (this.roundConfig.mustCallsUno !== null) {
       // The previous player get a penalty because didn't calls 'UNO' until the
       // the next player plays.
-      this.draw(this.roundConfig.mustCallsUno, 2);
+      this.getPlayerCards(this.roundConfig.mustCallsUno)
+        .push(...this.drawPile.splice(-2));
       this.roundConfig.mustCallsUno = null;
     }
   }
@@ -401,32 +390,36 @@ export default class Game {
       throw new Error('No available round found in this game');
     }
 
-    const currPlayer = this.roundConfig.turn;
+    const { roundConfig, players } = this;
+
+    const currPlayer = roundConfig.turn;
 
     // Checks if the current player in turn has only one remaining card.
     if (this.getPlayerCards(currPlayer).length === 1) {
-      this.roundConfig.mustCallsUno = currPlayer;
+      roundConfig.mustCallsUno = currPlayer;
     } else if (this.getPlayerCards(currPlayer).length === 0) {
-      this.roundConfig.winners.push(
-        this.roundConfig.players[this.roundConfig.turn],
+      roundConfig.winners.push(
+        players[roundConfig.turn],
       );
-      this.roundConfig.players.splice(this.roundConfig.turn, 1);
+      roundConfig.players[roundConfig.turn] = false;
 
-      if (this.roundConfig.players.length < 2) {
-        this.roundConfig.winners.push(...this.roundConfig.players);
-        this.roundConfig.isFinished = true;
+      if (players.length < 2) {
+        roundConfig.winners.push(players[roundConfig.players.indexOf(true)]);
+        roundConfig.isFinished = true;
         return null;
       }
     }
 
-    // Switch to the next turn
-    this.roundConfig.turn += this.roundConfig.isTurnClockwise ? 1 : -1;
+    do {
+      // Switch to the next turn
+      roundConfig.turn += this.roundConfig.isTurnClockwise ? 1 : -1;
 
-    if (this.roundConfig.turn < 0) {
-      this.roundConfig.turn = this.roundConfig.players.length - 1;
-    } else if (this.roundConfig.turn >= this.roundConfig.players.length) {
-      this.roundConfig.turn = 0;
-    }
+      if (roundConfig.turn < 0) {
+        roundConfig.turn = players.length - 1;
+      } else if (roundConfig.turn >= players.length) {
+        roundConfig.turn = 0;
+      }
+    } while (!roundConfig.players[roundConfig.turn]);
 
     return null;
   }
@@ -435,11 +428,11 @@ export default class Game {
    * Lists all actions cards and its corresponding side effects/actions methods.
    */
   #cardsActions = {
-    r: this.#reverseEffect,
-    s: this.#skipEffect,
-    w: () => { },
-    '+2': this.#drawTwoEffect,
-    '+4': this.#drawFourEffect,
+    r: this.#reverseEffect.bind(this),
+    s: this.#skipEffect.bind(this),
+    w: (() => { this.endTurn(); }),
+    '+2': this.#drawTwoEffect.bind(this),
+    '+4': this.#drawFourEffect.bind(this),
   };
 
   /**
@@ -447,7 +440,7 @@ export default class Game {
    */
   #reverseEffect() {
     this.roundConfig.isTurnClockwise = !this.roundConfig.isTurnClockwise;
-    if (this.roundConfig.players.length !== 2) this.endTurn();
+    if (this.players.length !== 2) this.endTurn();
   }
 
   /**
@@ -463,7 +456,7 @@ export default class Game {
    */
   #drawTwoEffect() {
     this.endTurn();
-    this.draw(this.roundConfig.turn, 2);
+    this.draw(2);
     this.endTurn();
   }
 
@@ -472,7 +465,7 @@ export default class Game {
    */
   #drawFourEffect() {
     this.endTurn();
-    this.draw(this.roundConfig.turn, 4);
+    this.draw(4);
     this.endTurn();
   }
 }

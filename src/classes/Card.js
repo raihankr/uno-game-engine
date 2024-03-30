@@ -1,5 +1,5 @@
 import titleize from 'titleize';
-import { actionCards, cardTypes } from '../namespaces/cardTypes';
+import { actionCards, cardTypes } from '../namespaces/cardTypes.js';
 
 /**
  * UNO card class.
