@@ -1,5 +1,5 @@
 {
-  "name": "uno-game-engine",
+  "name": "unogame-js",
   "version": "1.0.0",
   "description": "A simple UNO game engine written in JavaScript",
   "main": "index.js",
