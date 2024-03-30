@@ -30,5 +30,6 @@ module.exports = {
         code: 80,
       },
     ],
+    'import/extensions': 0,
   },
 };
