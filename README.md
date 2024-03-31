@@ -2,10 +2,13 @@
 A lightweight Uno Game Engine written in JavaScript.
 
 # Installation
-*Published soon.*
+* Install with npm
+  ```sh
+  npm install unogame-js
+  ```
 
 # How to use
-Visit the [tutorial page](#) for a basic setup on starting a new Uno game.
+Visit the [tutorial page](https://raihankr.github.io/unogame-js-docs) for a basic setup on starting a new Uno game.
 
-# APi Documentation
-Visit [this address](#) to view the documentation.
+# API Documentation
+Visit [this address](https://raihankr.github.io/unogame-js-docs) to view the documentation.
