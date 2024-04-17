@@ -1,0 +1,7 @@
+coverage
+Uno Game Engine.code-workspace
+*.repl.js
+*.test.js
+.eslintrc.cjs
+jest.config.cjs
+jsdoc.json

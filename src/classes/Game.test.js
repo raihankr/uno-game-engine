@@ -36,25 +36,25 @@ describe('Game', () => {
 
     test('create a new round', () => {
       game.newRound();
-      expect(game.roundConfig).not.toBeNull();
+      expect(game.round).not.toBeNull();
     });
 
     describe('.players', () => {
       test('checks reference (clone of Game#players)', () => {
-        expect(game.roundConfig.players).not.toBe(game.players);
+        expect(game.round.players).not.toBe(game.players);
       });
     });
   });
 
   describe('#drawPile', () => {
     test('checks reference', () => {
-      expect(game.drawPile).toStrictEqual(game.roundConfig.drawPile);
+      expect(game.drawPile).toStrictEqual(game.round.drawPile);
     });
   });
 
   describe('#discardPile', () => {
     test('checks reference', () => {
-      expect(game.discardPile).toStrictEqual(game.roundConfig.discardPile);
+      expect(game.discardPile).toStrictEqual(game.round.discardPile);
     });
   });
 
@@ -66,7 +66,7 @@ describe('Game', () => {
 
     test('checks reference', () => {
       expect(game.getPlayerCards(2))
-        .toStrictEqual(game.roundConfig.playersCards[2]);
+        .toStrictEqual(game.round.playersCards[2]);
     });
   });
 
@@ -121,12 +121,21 @@ describe('Game', () => {
 
   // TODO: #draw
   describe('#draw', () => {
-
+    test('checks if card had been drawed from the draw pile', () => {
+      const drawed = game.draw();
+      let lastLen = game.drawPile.length;
+      let lastTurn = game.round.turn;
+      expect(game.drawPile.length).toBe(lastLen += 1);
+      if (!drawed.symbol !== 's') {
+        expect(game.round.turn).not.toBe(lastTurn);
+        lastTurn = game.round.turn;
+      }
+    });
   });
 
   // TODO: #play
   describe('#play', () => {
-    test('Prevent jump-in', () => {
+    test('prevent jump-in', () => {
 
     });
   });
