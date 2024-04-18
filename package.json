@@ -1,32 +1,14 @@
 {
   "name": "unogame-js",
   "version": "1.0.0",
-  "description": "A simple UNO game engine written in JavaScript",
-  "main": "src/index.js",
-  "files": [
-    "package.json",
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "type": "module",
-  "scripts": {
-    "test": "ls -n -r | findstr .test.js | bun test --coverage",
-    "jsdoc": "jsdoc -c jsdoc.json"
-  },
+  "author": "Raihan Khairul Rochman",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/raihankr/uno-game-engine.git"
   },
-  "author": "Raihan Khairul Rochman",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/raihankr/uno-game-engine/issues"
-  },
-  "homepage": "https://github.com/raihankr/uno-game-engine#readme",
+  "main": "dist/index.js",
   "devDependencies": {
     "@types/bun": "latest",
-    "bun-plugin-dts": "^0.2.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
@@ -35,10 +17,28 @@
     "taffydb": "^2.7.3",
     "tui-jsdoc-template": "^1.2.2"
   },
-  "dependencies": {
-    "titleize": "^4.0.0"
-  },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/raihankr/uno-game-engine/issues"
+  },
+  "description": "A simple UNO game engine written in JavaScript",
+  "files": [
+    "package.json",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "homepage": "https://github.com/raihankr/uno-game-engine#readme",
+  "license": "MIT",
+  "scripts": {
+    "build": "bun run build.mjs",
+    "jsdoc": "jsdoc -c jsdoc.json",
+    "test": "ls -n -r | findstr .test.js | bun test --coverage"
+  },
+  "type": "module",
+  "dependencies": {
+    "titleize": "^4.0.0"
   }
 }
