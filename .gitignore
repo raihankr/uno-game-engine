@@ -1,4 +1,5 @@
 coverage
 node_modules
-Uno Game Engine.code-workspace
 *.repl.js
+*.code-workspace
+dist

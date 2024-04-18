@@ -34,6 +34,6 @@
         "readme": "README.md",
         "package": "package.json",
         "template": "node_modules/tui-jsdoc-template",
-        "destination": "../Uno Game Engine Docs"
+        "destination": "../Uno_Game_Engine_Docs"
     }
 }
